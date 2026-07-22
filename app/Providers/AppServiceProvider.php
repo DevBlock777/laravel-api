@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Cache\RateLimiting\Limit;
+use Dedoc\Scramble\Scramble;
+use Dedoc\Scramble\Support\Generator\OpenApi;
+use Dedoc\Scramble\Support\Generator\SecurityScheme;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,6 +35,12 @@ class AppServiceProvider extends ServiceProvider
         //throttle:api
         RateLimiter::for("api",function(Request $request){
          return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
+        Scramble::afterOpenApiGenerated(function(OpenApi $openApi){
+            $openApi->secure(
+                SecurityScheme::http("bearer","BearerAuth")
+            );
         });
     }
 

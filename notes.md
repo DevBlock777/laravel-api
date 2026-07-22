@@ -15,3 +15,20 @@ Ajouter ca dans services.php
     ]
 - php artisan make:class Services/OpenAiService
  Pour créer la classe OpenAiService dans le dossier Services
+
+# Documentation
+- https://github.com/dedoc/scramble
+- composer require dedoc/scramble
+- A ajouter dans AppService.php
+ ```js
+use Dedoc\Scramble\Scramble;
+use Dedoc\Scramble\Support\Generator\OpenApi;
+use Dedoc\Scramble\Support\Generator\SecurityScheme;
+
+Scramble::afterOpenApiGenerated(function(OpenApi $openApi){
+            $openApi->secure(
+                SecurityScheme::http("bearer","BearerAuth")
+            );
+        });
+ ``
+
